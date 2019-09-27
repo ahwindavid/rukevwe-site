@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Slider</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
+      <script src="t.min.js"></script>
+       <link rel="stylesheet" href="style.css">
+</head>
+<body>
+      <button class="btn" data-modal-target="#modal">LOGIN</button>
+      <div class="modal" id="modal">
+            
+        <div class="modal-header">
+                  <button data-close-button class="close-button">&times;</button>
+          <div class="title">SIGN IN</div>
+          
+        </div>
+        <div class="modal-body">
+              
+                  <div class="form_group" id="form_choice">
+                             <span class="username">USERNAME</span> <input type="text" class="form_input" required>
+                                 <label for="name" class="form_label"></label>
+                  </div>
+                  <div class="form_group" id="form_choice">
+                              <span class="username">PASSWORD</span><input type="text" class="form_input"  required>
+                              <label for="name" class="form_label"></label>
+                  </div>
+                  <p class="change"><span class="forgot">Forgot</span> <span class="user">Username/Password?</span></p>
+                  <a href="#" class="btn1 btn-white btn-animated">LOGIN</a>
+        </div>
+      </div>
+      <div id="overlay"></div>
+            <div class="side-bar">
+                  
+                <ul>
+                <li><a href="https://www.twitter.com" class="fa fa-twitter"></a></li>
+                <li><a href="https://www.instagram.com" class="fa fa-instagram"></a></li>
+                <li><a href="https://www.facebook.com" class="fa fa-facebook"></a></li>
+                <li><a href="https://www.linkedin.com" class="fa fa-linkedin"></a></li>
+                <li><a href="https://www.twitter.com" class="fa fa-twitter"></a></li>
+                </ul>
+                
+            </div>
+      
+
+      <div class="slide active">
+            <div class="card"></div>
+                <div class="card-content">
+                       <h2 class="card-header" id="main">Hey There,<ins>1.5</ins> <br/> I am Ahwin Oghenerukevwe</h2>
+                        <p class="card-para card-para-animation ">A Full Stack Developer / Amateur UI/UX designer based in Lagos, Nigeria.</p>
+                        <a class="card-link card-link-animation">Read</a>
+                  </div>
+            </div>
+      </div>
+      <div class="slide">
+            <div class="card">
+                 
+                  <div class="card-content">
+                       
+                        <h2 class="card-header">Home Outdoors</h2>
+                        <p class="card-para">Lorem ipsum dolor sit amet, consectetur adipisicing eli</p>
+                  <a class="card-link">Read</a>
+                  </div>
+            </div>
+      </div>
+      <div class="slide">
+            <div class="card">
+                 
+                  <div class="card-content">
+                     
+                        <h2 class="card-header">A Mystic Walk</h2>
+                        <p class="card-para">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                  <a class="card-link">Read</a>
+                  </div>
+            </div>
+      </div>
+      <div class="prevnext">
+            <button class="pn-btn" id="prev"></button>
+            <button class="pn-btn" id="next"></button>
+      </div>
+
+      <script type="text/javascript">
+      $('#main').t({
+    beep:true,
+    caret:'<span style="color:black;">•</span>',
+    typing:function(elm,chr){
+
+   if(chr.match(/\-trigger/))
+     $('#pow-txt').show().delay(500).fadeOut(0);
+  
+ }
+});
+const openModalButtons = document.querySelectorAll('[data-modal-target]')
+const closeModalButtons = document.querySelectorAll('[data-close-button]')
+const overlay = document.getElementById('overlay')
+
+openModalButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const modal = document.querySelector(button.dataset.modalTarget)
+    openModal(modal)
+  })
+})
+
+overlay.addEventListener('click', () => {
+  const modals = document.querySelectorAll('.modal.active')
+  modals.forEach(modal => {
+    closeModal(modal)
+  })
+})
+
+closeModalButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const modal = button.closest('.modal')
+    closeModal(modal)
+  })
+})
+
+function openModal(modal) {
+  if (modal == null) return
+  modal.classList.add('active')
+  overlay.classList.add('active')
+}
+
+function closeModal(modal) {
+  if (modal == null) return
+  modal.classList.remove('active')
+  overlay.classList.remove('active')
+}
+
+      
+      var $activeSlide = $('.active'),
+      $homeSlide = $(".slide"),
+      $slideNavPrev = $("#prev"),
+      $slideNavNext = $("#next");
+
+      function init() {
+            TweenMax.set($homeSlide.not($activeSlide), {autoAlpha: 0});
+            TweenMax.set($slideNavPrev, {autoAlpha: 0.2});
+      }
+
+      init();
+
+      function goToNextSlide(slideOut, slideIn, slideInAll) {
+            var t1 = new TimelineLite(),
+            slideOutContent = slideOut.find('.card-content'),
+            slideInContent = slideIn.find('.card-content'),
+            slideOutImg = slideOut.find('.card-img'),
+            slideInImg = slideIn.find('.card-img'),
+            index = slideIn.index(),
+            size = $homeSlide.length;
+            console.log(index);
+
+            if(slideIn.length !== 0) {
+            t1
+            .set(slideIn, {autoAlpha: 1, className: '+=active'})
+            .set(slideOut, {className: '-=active'})
+            .to(slideOutContent, 0.65, {y: "+=40px", ease: Power3.easeInOut}, 0)
+            .to(slideOutImg, 0.65, {backgroundPosition :'bottom', ease: Power3.easeInOut}, 0)
+            .to(slideInAll, 1, {y: "-=100%", ease: Power3.easeInOut}, 0)
+            .fromTo(slideInContent, 0.65, {y: '-=40px'}, {y : 0, ease: Power3.easeInOut}, "-=0.7")
+            .fromTo(slideInImg, 0.65, {backgroundPosition: 'top'}, {backgroundPosition: 'bottom', ease: Power3.easeInOut}, '-=0.7')
+            }
+
+            TweenMax.set($slideNavPrev, {autoAlpha: 1});
+
+            if(index === size - 1){
+                  TweenMax.to($slideNavNext, 0.3, {autoAlpha: 0.2, ease:Linear.easeNone});
+            }
+      };
+
+      $slideNavNext.click(function(e) {
+            e.preventDefault();
+
+            var slideOut = $('.slide.active'),
+            slideIn = $('.slide.active').next('.slide'),
+            slideInAll = $('.slide');
+
+            goToNextSlide(slideOut, slideIn, slideInAll);
+
+      });
+
+      function goToPrevSlide(slideOut, slideIn, slideInAll) {
+            var t1 = new TimelineLite(),
+            slideOutContent = slideOut.find('.card-content'),
+            slideInContent = slideIn.find('.card-content'),
+            slideOutImg = slideOut.find('.card-img'),
+            slideInImg = slideIn.find('.card-img'),
+            index = slideIn.index(),
+            size = $homeSlide.length;
+
+            if(slideIn.length !== 0) {
+            t1
+            .set(slideIn, {autoAlpha: 1, className: '+=active'})
+            .set(slideOut, {className: '-=active'})
+            .to(slideOutContent, 0.65, {y: "-=40px", ease: Power3.easeInOut}, 0)
+            .to(slideOutImg, 0.65, {backgroundPosition :'top', ease: Power3.easeInOut}, 0)
+            .to(slideInAll, 1, {y: "+=100%", ease: Power3.easeInOut}, 0)
+            .fromTo(slideInContent, 0.65, {y: '+=40px'}, {y : 0, ease: Power3.easeInOut}, "-=0.7")
+            .fromTo(slideInImg, 0.65, {backgroundPosition: 'bottom'}, {backgroundPosition: 'top', ease: Power3.easeInOut}, '-=0.7')
+            }
+
+            TweenMax.set($slideNavPrev, {autoAlpha: 1});
+
+            if(index === 0){
+                  TweenMax.to($slideNavPrev, 0.3, {autoAlpha: 0.2, ease:Linear.easeNone});
+            }
+      };
+
+      $slideNavPrev.click(function(e) {
+            e.preventDefault();
+
+            var slideOut = $('.slide.active'),
+            slideIn = $('.slide.active').prev('.slide'),
+            slideInAll = $('.slide');
+
+            goToPrevSlide(slideOut, slideIn, slideInAll);
+      
+      });
+
+</script>
+      
+</body>
+</html>
